@@ -11,7 +11,7 @@ public class Arm extends SubsystemBase {
     private static boolean hasInstance = false;
 
     private final ArmIO io;
-    //    private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
+    private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
     private Rotation2d setpoint = new Rotation2d();
 
     //    Alerts n things
@@ -54,5 +54,7 @@ public class Arm extends SubsystemBase {
 
     public void setPosition(Rotation2d position) {}
 
-    public Rotation2d getPosition() {}
+    public Rotation2d getPosition() {
+        return new Rotation2d();
+    }
 }
