@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.*;
@@ -94,6 +95,10 @@ class ArmIOTalonFX implements ArmIO {
 
     public void setArmVoltage(double voltage) {
         armVoltageReq.withOutput(voltage);
+    }
+
+    public void setBrakeMode(boolean isBrakeMode) {
+        armTalonFXconfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     }
 
     public void updateInputs(ArmIOInputs inputs) {

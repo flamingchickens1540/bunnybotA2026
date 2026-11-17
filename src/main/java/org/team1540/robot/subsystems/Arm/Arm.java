@@ -1,10 +1,18 @@
 package org.team1540.robot.subsystems.Arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.team1540.robot.subsystems.Arm.ArmConstants.*;
+import org.team1540.robot.util.LoggedTracer;
 import org.team1540.robot.util.LoggedTunableNumber;
 
 public class Arm extends SubsystemBase {
@@ -14,7 +22,7 @@ public class Arm extends SubsystemBase {
     private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
     private Rotation2d setpoint = new Rotation2d();
 
-    //    Alerts n things
+    private final Alert armDisconnectedAlert = new Alert("Arm disconnected", Alert.AlertType.kError);
 
     public enum ArmState {
         STOW(new LoggedTunableNumber("Arm/Setpoints/Stow", 0)),
@@ -48,13 +56,67 @@ public class Arm extends SubsystemBase {
         io = armIO;
     }
 
-    public void periodic() {}
+    public void periodic() {
+        LoggedTracer.reset();
+        io.updateInputs(inputs);
+        Logger.processInputs("Arm",inputs);
 
-    public void holdPosition() {}
+        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmFF(kS.get(), kV.get(),kG.get()), kS,kV,kG);
+        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmPID(kP.get(), kI.get(),kD.get()), kP,kI,kD);
 
-    public void setPosition(Rotation2d position) {}
+        armDisconnectedAlert.set(!inputs.armConnected);
+
+        LoggedTracer.record("Arm");
+    }
+
+    public void holdPosition() {
+        setPosition(getPosition());
+    }
+
+    public void setPosition(Rotation2d position) {
+        setpoint = Rotation2d.fromRotations(MathUtil.clamp(position.getRotations(), ArmConstants.ARM_MIN_ANGLE.getRotations(), ArmConstants.ARM_MAX_ANGLE.getRotations()));
+        io.setArmSetpoint(setpoint);
+    }
 
     public Rotation2d getPosition() {
-        return new Rotation2d();
+        return inputs.armPosition;
+    }
+
+    public void setBrakeMode(boolean isBrakeMode) {
+        io.setBrakeMode(isBrakeMode);
+    }
+
+    @AutoLogOutput(key = "Arm/AtSetpoint")
+    public boolean isAtSetpoint() {
+        return MathUtil.isNear(setpoint.getRotations(), getPosition().getRotations(), ArmConstants.ARM_ERROR_TOLERANCE);
+    }
+
+    @AutoLogOutput(key = "Arm/Setpoint")
+    public Rotation2d getSetpoint() {
+        return setpoint;
+    }
+
+    public Command commandToSetpoint(Rotation2d position) {
+        return Commands.run(() -> setPosition(position), this).until(this::isAtSetpoint);
+    }
+
+    public Command commandToSetpoint(ArmState state) {
+        return commandToSetpoint(state.position());
+    }
+
+    @AutoLogOutput(key = "Arm/TimeToSetpoint")
+    public double timeToSetpoint() {
+        return isAtSetpoint() ? 0 : timeToSetpoint(getSetpoint());
+    }
+
+    public double timeToSetpoint(Rotation2d setpoint) {
+        trapezoidProfile.calculate(0,
+                new TrapezoidProfile.State(getPosition().getRotations(), inputs.armMotorVelocityRPS),
+                new TrapezoidProfile.State(setpoint.getRotations(), 0));
+        return trapezoidProfile.totalTime();
+    }
+
+    public static Arm createReal() {
+        return new Arm(new ArmIOTalonFX());
     }
 }

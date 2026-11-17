@@ -27,4 +27,6 @@ public interface ArmIO {
     default void setArmVoltage(double voltage) {}
 
     default void updateInputs(ArmIOInputs inputs) {}
+
+    default void setBrakeMode(boolean isBrakeMode) {}
 }
