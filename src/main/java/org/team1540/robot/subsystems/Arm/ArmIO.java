@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {
     @AutoLog
-    class IntakeInputs {
+    class ArmIOInputs {
         public boolean armConnected;
         public Rotation2d armPosition;
         public double armMotorVelocityRPS;
@@ -13,6 +13,7 @@ public interface ArmIO {
         public double armSupplyCurrentAmps;
         public double armStatorCurrentAmps;
         public double armMotorTemp;
+        public double armPIDError;
     }
 
     default void setArmPID(double kP, double kI, double kD) {}
@@ -25,5 +26,5 @@ public interface ArmIO {
 
     default void setArmVoltage(double voltage) {}
 
-    default void updateInputs(IntakeInputs inputs) {}
+    default void updateInputs(ArmIOInputs inputs) {}
 }
