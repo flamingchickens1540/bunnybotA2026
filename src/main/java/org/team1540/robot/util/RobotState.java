@@ -7,7 +7,6 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -31,21 +30,11 @@ public class RobotState {
             new SwerveDriveKinematics(DrivetrainConstants.getModuleTranslations());
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, lastGyroRotation, lastModulePositions, Pose2d.kZero);
-    private final Timer poseResetTimer = new Timer();
 
     private final TimeInterpolatableBuffer<Pose2d> poseBuffer = TimeInterpolatableBuffer.createBuffer(0.5);
 
     private final Field2d field = new Field2d();
     private Pose2d[] activeTrajectory;
-
-    /*
-    private RobotState() {
-        poseResetTimer.start();
-        SmartDashboard.putData(field);
-
-
-    }
-    */
 
     public SwerveDriveKinematics getKinematics() {
         return kinematics;
@@ -59,15 +48,6 @@ public class RobotState {
         poseBuffer.addSample(timestamp, poseEstimator.getEstimatedPosition());
         field.setRobotPose(getEstimatedPose());
     }
-    /*
-        public void resetPose(
-                Pose2d newPose) { // TODO: so it needs SIM state but is this because it uses SIM to estimate or something else
-            if (Constants.CURRENT_MODE == Constants.Mode.SIM) SimState.getInstance().resetSimPose(newPose);
-            poseEstimator.resetPosition(lastGyroRotation, lastModulePositions, newPose);
-            poseBuffer.clear();
-            poseResetTimer.restart();
-        }
-    */
     @AutoLogOutput(key = "Odometry/EstimatedPose")
     public Pose2d getEstimatedPose() {
         return poseEstimator.getEstimatedPosition();
