@@ -3,15 +3,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.ExampleSubsystem;
+package org.team1540.robot.subsystems.ExampleSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ExampleSubsystem.ExampleIOTalonFX;
+// import frc.robot.subsystems.ExampleSubsystem.ExampleInputsAutoLogged;
 
 public class ExampleSubsystem extends SubsystemBase {
     ExampleIOTalonFX io = new ExampleIOTalonFX();
-    ExampleInputsAutoLogged inputs = new ExampleInputsAutoLogged();
+    //    ExampleInputsAutoLogged inputs = new ExampleInputsAutoLogged();
     /** Creates a new ExampleSubsystem. */
     public ExampleSubsystem() {}
 

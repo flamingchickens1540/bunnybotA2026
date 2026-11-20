@@ -40,7 +40,8 @@ class ArmIOTalonFX implements ArmIO {
         armGains.kS = ArmConstants.ARM_KS;
         armGains.kV = ArmConstants.ARM_KV;
         armGains.kG = ArmConstants.ARM_KG;
-        // set TalonFX cfgs, MotionMagic, slot0
+
+        // Configuring supply limits and hard stops for motor
 
         armTalonFXconfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         armTalonFXconfig.CurrentLimits.SupplyCurrentLimit = ArmConstants.ARM_SUPPLY_LIMIT_AMPS;
@@ -52,13 +53,15 @@ class ArmIOTalonFX implements ArmIO {
         armTalonFXconfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         armTalonFXconfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ArmConstants.ARM_MIN_ANGLE.getRotations();
 
-        armTalonFX.getConfigurator().apply(armTalonFXconfig);
+        // Configurating ideal acceleration and cruise velocity for motor
 
-        //        Check if you need this
         MotionMagicConfigs motionMagicConfigs = armTalonFXconfig.MotionMagic;
         motionMagicConfigs.MotionMagicAcceleration = ArmConstants.ARM_ACCELERATION_RPS2;
         motionMagicConfigs.MotionMagicCruiseVelocity = ArmConstants.ARM_CRUISE_VELOCITY_RPS;
 
+        armTalonFX.getConfigurator().apply(armTalonFXconfig);
+
+        // Setting logger frequency
         BaseStatusSignal.setUpdateFrequencyForAll(
                 50,
                 armStatorCurrent,
@@ -71,6 +74,7 @@ class ArmIOTalonFX implements ArmIO {
         armTalonFX.optimizeBusUtilization();
     }
 
+    // Changes arm pid
     public void setArmPID(double kP, double kI, double kD) {
         Slot0Configs cfgs = armTalonFXconfig.Slot0;
         armTalonFX.getConfigurator().refresh(cfgs);
@@ -80,6 +84,7 @@ class ArmIOTalonFX implements ArmIO {
         armTalonFX.getConfigurator().apply(cfgs);
     }
 
+    // Changes arm feedforward
     public void setArmFF(double kS, double kV, double kG) {
         Slot0Configs cfgs = armTalonFXconfig.Slot0;
         armTalonFX.getConfigurator().refresh(cfgs);
@@ -89,18 +94,22 @@ class ArmIOTalonFX implements ArmIO {
         armTalonFX.getConfigurator().apply(cfgs);
     }
 
+    // Makes arm go to setpoint
     public void setArmSetpoint(Rotation2d rotations) {
         armPositionReq.withPosition(rotations.getRotations());
     }
 
+    // Makes motor use this voltage
     public void setArmVoltage(double voltage) {
         armVoltageReq.withOutput(voltage);
     }
 
+    // Changes brake mode
     public void setBrakeMode(boolean isBrakeMode) {
         armTalonFXconfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
     }
 
+    // Updates log data
     public void updateInputs(ArmIOInputs inputs) {
         StatusCode armStatus = BaseStatusSignal.refreshAll(
                 armStatorCurrent,
