@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package org.team1540.robot.subsystems.Drivetrain.frc.robot;
+package org.team1540.robot.subsystems.Drivetrain;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import org.team1540.robot.subsystems.Drivetrain.frc.robot.generated.TunerConstants;
-import org.team1540.robot.subsystems.Drivetrain.frc.robot.subsystems.CommandSwerveDrivetrain;
+import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants;
 
 public class RobotContainer {
     private double MaxSpeed =
@@ -31,8 +30,7 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final org.team1540.robot.subsystems.Drivetrain.frc.robot.Telemetry logger =
-            new org.team1540.robot.subsystems.Drivetrain.frc.robot.Telemetry(MaxSpeed);
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController controller = new CommandXboxController(0);
 

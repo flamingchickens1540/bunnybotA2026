@@ -13,7 +13,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.DoubleSupplier;
-import org.team1540.robot.subsystems.Drivetrain.frc.robot.generated.TunerConstants;
+import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants;
 
 /**
  * Provides an interface for asynchronously reading high-frequency measurements to a set of queues.
@@ -99,7 +99,7 @@ public class OdometryThread extends Thread {
     }
 
     @Override
-    public void run() { //what happens when you run thread.start
+    public void run() { // what happens when you run thread.start
         while (true) {
             // Wait for updates from all signals
             signalsLock.lock();

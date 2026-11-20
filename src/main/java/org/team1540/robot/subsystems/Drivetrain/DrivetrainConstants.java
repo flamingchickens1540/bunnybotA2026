@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import org.team1540.robot.subsystems.Drivetrain.frc.robot.generated.TunerConstants;
+import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants;
 
 public class DrivetrainConstants {
     public static final double ODOMETRY_FREQUENCY = 250.0; // How many times per second
