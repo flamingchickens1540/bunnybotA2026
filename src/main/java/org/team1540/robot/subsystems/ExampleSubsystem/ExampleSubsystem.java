@@ -3,24 +3,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.ExampleSubsystem;
+package org.team1540.robot.subsystems.ExampleSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.ExampleSubsystem.ExampleIOTalonFX;
+import frc.robot.subsystems.ExampleSubsystem.ExampleInputsAutoLogged;
 
-
-
-public class ExampleSubsystem extends SubsystemBase
-{
+public class ExampleSubsystem extends SubsystemBase {
     ExampleIOTalonFX io = new ExampleIOTalonFX();
     ExampleInputsAutoLogged inputs = new ExampleInputsAutoLogged();
     /** Creates a new ExampleSubsystem. */
-    public ExampleSubsystem() {
+    public ExampleSubsystem() {}
 
-    }
-    
-    
     /**
      * Example command factory method.
      *
@@ -30,42 +26,36 @@ public class ExampleSubsystem extends SubsystemBase
         // Inline construction of command goes here.
         // Subsystem::RunOnce implicitly requires `this` subsystem.
         return runOnce(
-                () ->
-                     io.setExampleMotorVoltage(12)//set to full forwards
-                ).andThen(Commands.waitSeconds(2))
-                .andThen(
-                        ()-> io.setExampleMotorVoltage(-12)//set to full backwards
+                        () -> io.setExampleMotorVoltage(12) // set to full forwards
                         )
                 .andThen(Commands.waitSeconds(2))
                 .andThen(
-                        ()-> io.setExampleMotorVoltage(-12)//set to full still
-                );
+                        () -> io.setExampleMotorVoltage(-12) // set to full backwards
+                        )
+                .andThen(Commands.waitSeconds(2))
+                .andThen(
+                        () -> io.setExampleMotorVoltage(-12) // set to full still
+                        );
     }
-    
-    
+
     /**
      * An example method querying a boolean state of the subsystem (for example, a digital sensor).
      *
      * @return value of some boolean subsystem state, such as a digital sensor.
      */
-    public boolean exampleCondition()
-    {
+    public boolean exampleCondition() {
         // Query some boolean state, such as a digital sensor.
         return false;
     }
-    
-    
+
     @Override
-    public void periodic()
-    {
+    public void periodic() {
         // This method will be called once per scheduler run
-        //io.updateInputs(inputs);
+        // io.updateInputs(inputs);
     }
-    
-    
+
     @Override
-    public void simulationPeriodic()
-    {
+    public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
     }
 }
