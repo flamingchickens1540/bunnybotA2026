@@ -15,7 +15,7 @@ public class Elevator extends SubsystemBase {
     private final ElevatorIO IO;
     private final ElevatorIOInputsAutoLogged ioInputs = new ElevatorIOInputsAutoLogged();
 
-    enum ElevatorState {
+    public enum ElevatorState {
         STOW(0),
         SCORING(maxHeightMeters),
         PICKUP(pickUpHeightMeters); // in meters
@@ -44,26 +44,30 @@ public class Elevator extends SubsystemBase {
     }
 
     public Command setVoltageCommand(DoubleSupplier volts) {
-        return Commands.runOnce(
+        return Commands.run(
                 () -> {
                     double voltsAsDouble = volts.getAsDouble();
-                    setVoltage(voltsAsDouble);
+                    if (Math.abs(voltsAsDouble) > 1) setVoltage(voltsAsDouble);
+                    else setVoltage(0);
                 },
                 this);
     }
 
     public Command zero() {
-        return Commands.runOnce(() -> {
-            IO.zero();
-        });
+        return Commands.runOnce(
+                () -> {
+                    IO.zero();
+                },
+                this);
     }
 
     public Command goToSetpoint(ElevatorState elevatorState) {
-        return Commands.runOnce(() -> {
+        return Commands.runOnce(
+                () -> {
                     IO.moveTo(elevatorState.position);
                     setPosition(elevatorState.position);
-                })
-                .until(() -> isAtSetpoint(positionToleranceMeters));
+                },
+                this);
     }
 
     @Override

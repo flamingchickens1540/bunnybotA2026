@@ -5,6 +5,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -27,11 +28,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private final StatusSignal<AngularVelocity> leftMotorVelocity = leftMotor.getVelocity(); // returns rotations/second
     private final Follower follower = new Follower(ElevatorConstants.rightMotorCANID, MotorAlignmentValue.Opposed);
     private final MotionMagicVoltage positionControl = new MotionMagicVoltage(0);
+    private final VoltageOut voltageControl = new VoltageOut(0);
 
     public ElevatorIOTalonFX() {
         leftMotor.setControl(follower);
         TalonFXConfiguration configs = new TalonFXConfiguration();
-        configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         configs.Feedback.SensorToMechanismRatio = ElevatorConstants.gearRatio;
         configs.CurrentLimits.SupplyCurrentLimit = 67;
         configs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -48,8 +50,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
         configs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.magicAcceleration;
         rightMotor.getConfigurator().apply(configs);
         leftMotor.getConfigurator().apply(configs);
-        leftMotor.optimizeBusUtilization();
-        rightMotor.optimizeBusUtilization();
     }
 
     @Override
@@ -85,7 +85,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     @Override
     public void setVoltage(double volts) {
-        rightMotor.setVoltage(volts);
+        rightMotor.setControl(voltageControl.withOutput(volts));
         leftMotor.setControl(follower);
     }
 }
