@@ -1,4 +1,4 @@
-package org.team1540.robot.subsystems.Drivetrain.generated;
+package org.team1540.robot.generated;
 
 import static edu.wpi.first.units.Units.*;
 

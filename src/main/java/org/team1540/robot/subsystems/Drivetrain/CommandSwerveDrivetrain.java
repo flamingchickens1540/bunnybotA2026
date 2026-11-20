@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants;
-import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants.TunerSwerveDrivetrain;
+import org.team1540.robot.generated.TunerConstants;
+import org.team1540.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements

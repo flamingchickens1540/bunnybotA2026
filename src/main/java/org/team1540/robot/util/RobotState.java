@@ -48,6 +48,7 @@ public class RobotState {
         poseBuffer.addSample(timestamp, poseEstimator.getEstimatedPosition());
         field.setRobotPose(getEstimatedPose());
     }
+
     @AutoLogOutput(key = "Odometry/EstimatedPose")
     public Pose2d getEstimatedPose() {
         return poseEstimator.getEstimatedPosition();

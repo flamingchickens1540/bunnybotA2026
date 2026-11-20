@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import org.team1540.robot.Constants;
-import org.team1540.robot.subsystems.Drivetrain.generated.TunerConstants;
+import org.team1540.robot.generated.TunerConstants;
 // import org.team1540.robot.util.AllianceFlipUtil;
 import org.team1540.robot.util.*;
 import org.team1540.robot.util.swerve.TrajectoryController;
