@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.*;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
@@ -125,7 +124,6 @@ public class ModuleIOTalonFX implements ModuleIO {
                 turnSupplyCurrent,
                 turnStatorCurrent,
                 turnTemp);
-        ParentDevice.optimizeBusUtilizationForAll(drive, turn, cancoder);
     }
 
     @Override

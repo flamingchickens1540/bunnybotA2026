@@ -341,7 +341,7 @@ public class Drivetrain extends SubsystemBase {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
     }
-    // TODO: What does this function do? Does it just make a blake drivetrain?
+    // TODO: What does this function do? Does it just make a blank drivetrain if there is no current drivetrain?
     public static Drivetrain createDummy() {
         if (Constants.CURRENT_MODE == Constants.Mode.REAL)
             DriverStation.reportWarning("Using dummy drivetrain on real robot", false);

@@ -12,7 +12,7 @@ public class DrivetrainConstants {
     public static final CANBus CAN_BUS = TunerConstants.kCANBus;
 
     public static final double DRIVEBASE_RADIUS = Math.max(
-            Math.max(
+            Math.max( //We do Math.max to account for robots that aren't perfect squares
                     Math.hypot(TunerConstants.FrontLeft.LocationX, TunerConstants.FrontLeft.LocationY),
                     Math.hypot(TunerConstants.FrontRight.LocationX, TunerConstants.FrontRight.LocationY)),
             Math.max(
