@@ -69,7 +69,6 @@ class ArmIOTalonFX implements ArmIO {
 
         armTalonFX.getConfigurator().apply(armTalonFXconfig);
 
-
         // Setting logger frequency
         BaseStatusSignal.setUpdateFrequencyForAll(
                 50,

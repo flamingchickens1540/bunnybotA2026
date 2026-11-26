@@ -7,8 +7,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
-import frc.robot.subsystems.ExampleSubsystem.ExampleIO;
-import frc.robot.subsystems.ExampleSubsystem.ExampleSubsystemConstants;
 
 public class ExampleIOTalonFX implements ExampleIO {
     private final TalonFX exampleMotor = new TalonFX(ExampleSubsystemConstants.EXAMPLE_MOTOR_ID);

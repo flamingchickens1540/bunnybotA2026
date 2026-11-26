@@ -63,16 +63,14 @@ public class Arm extends SubsystemBase {
 
         // Processing data
         LoggedTracer.reset();
-                io.updateInputs(inputs);
-                Logger.processInputs("Arm", inputs);
+        io.updateInputs(inputs);
+        Logger.processInputs("Arm", inputs);
 
-                // Updates PID/FF of motor if changed during tuning
-                LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmFF(kS.get(), kV.get(), kG.get()), kS, kV,
-         kG);
-                LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmPID(kP.get(), kI.get(), kD.get()), kP, kI,
-         kD);
+        // Updates PID/FF of motor if changed during tuning
+        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmFF(kS.get(), kV.get(), kG.get()), kS, kV, kG);
+        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmPID(kP.get(), kI.get(), kD.get()), kP, kI, kD);
 
-                armDisconnectedAlert.set(!inputs.armConnected);
+        armDisconnectedAlert.set(!inputs.armConnected);
 
         // Logging data
         LoggedTracer.record("Arm");
@@ -147,7 +145,6 @@ public class Arm extends SubsystemBase {
     public static Arm createDummy() {
         return new Arm(new ArmIO() {});
     }
-
 
     public static Arm createSim() {
         return new Arm(new ArmIO() {});

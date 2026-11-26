@@ -8,8 +8,6 @@ package org.team1540.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.ExampleSubsystem.ExampleIOTalonFX;
-// import frc.robot.subsystems.ExampleSubsystem.ExampleInputsAutoLogged;
 
 public class ExampleSubsystem extends SubsystemBase {
     ExampleIOTalonFX io = new ExampleIOTalonFX();
