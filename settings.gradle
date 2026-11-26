@@ -15,7 +15,6 @@ pluginManagement {
             frcHome = new File(homeRoot, frcYear)
         } else {
             def userFolder = System.getProperty("user.home")
-            println(userFolder)
             def homeRoot = new File(userFolder, "wpilib")
             frcHome = new File(homeRoot, frcYear)
         }

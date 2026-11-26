@@ -17,6 +17,7 @@ public class ArmConstants {
     public static double ARM_SUPPLY_LIMIT_AMPS = 50;
     public static double ARM_SUPPLY_LOWER_LIMIT_AMPS = 0.1;
     public static double ARM_SUPPLY_LOWER_TIME_S = 15;
+    public static double ARM_GEAR_RATIO = 1.0;
 
     public static double ARM_CRUISE_VELOCITY_RPS = 0;
     public static double ARM_ACCELERATION_RPS2 = 0;

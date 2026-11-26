@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.team1540.robot.subsystems.Arm.ArmConstants.*;
 import org.team1540.robot.util.LoggedTracer;
 import org.team1540.robot.util.LoggedTunableNumber;
@@ -17,7 +18,7 @@ public class Arm extends SubsystemBase {
     private static boolean hasInstance = false;
 
     private final ArmIO io;
-    //    private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
+    private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
     private Rotation2d setpoint = new Rotation2d();
 
     private final Alert armDisconnectedAlert = new Alert("Arm disconnected", Alert.AlertType.kError);
@@ -62,16 +63,16 @@ public class Arm extends SubsystemBase {
 
         // Processing data
         LoggedTracer.reset();
-        //        io.updateInputs(inputs);
-        //        Logger.processInputs("Arm", inputs);
-        //
-        //        // Updates PID/FF of motor if changed during tuning
-        //        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmFF(kS.get(), kV.get(), kG.get()), kS, kV,
-        // kG);
-        //        LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmPID(kP.get(), kI.get(), kD.get()), kP, kI,
-        // kD);
-        //
-        //        armDisconnectedAlert.set(!inputs.armConnected);
+                io.updateInputs(inputs);
+                Logger.processInputs("Arm", inputs);
+
+                // Updates PID/FF of motor if changed during tuning
+                LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmFF(kS.get(), kV.get(), kG.get()), kS, kV,
+         kG);
+                LoggedTunableNumber.ifChanged(hashCode(), () -> io.setArmPID(kP.get(), kI.get(), kD.get()), kP, kI,
+         kD);
+
+                armDisconnectedAlert.set(!inputs.armConnected);
 
         // Logging data
         LoggedTracer.record("Arm");
@@ -131,15 +132,24 @@ public class Arm extends SubsystemBase {
 
     // helper
     public double timeToSetpoint(Rotation2d setpoint) {
-        //        trapezoidProfile.calculate(
-        //                0,
-        //                new TrapezoidProfile.State(getPosition().getRotations(), inputs.armMotorVelocityRPS),
-        //                new TrapezoidProfile.State(setpoint.getRotations(), 0));
+        trapezoidProfile.calculate(
+                0,
+                new TrapezoidProfile.State(getPosition().getRotations(), inputs.armMotorVelocityRPS),
+                new TrapezoidProfile.State(setpoint.getRotations(), 0));
         return trapezoidProfile.totalTime();
     }
 
     // returns a real arm
     public static Arm createReal() {
         return new Arm(new ArmIOTalonFX());
+    }
+
+    public static Arm createDummy() {
+        return new Arm(new ArmIO() {});
+    }
+
+
+    public static Arm createSim() {
+        return new Arm(new ArmIO() {});
     }
 }

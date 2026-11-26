@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,6 +42,7 @@ class ArmIOTalonFX implements ArmIO {
         armGains.kS = ArmConstants.ARM_KS;
         armGains.kV = ArmConstants.ARM_KV;
         armGains.kG = ArmConstants.ARM_KG;
+        armGains.GravityType = GravityTypeValue.Arm_Cosine;
 
         // Configuring supply limits and hard stops for motor
 
@@ -53,6 +56,11 @@ class ArmIOTalonFX implements ArmIO {
         armTalonFXconfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
         armTalonFXconfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = ArmConstants.ARM_MIN_ANGLE.getRotations();
 
+        armTalonFXconfig.Feedback.SensorToMechanismRatio = ArmConstants.ARM_GEAR_RATIO;
+
+        armTalonFXconfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        armTalonFXconfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
         // Configurating ideal acceleration and cruise velocity for motor
 
         MotionMagicConfigs motionMagicConfigs = armTalonFXconfig.MotionMagic;
@@ -60,6 +68,7 @@ class ArmIOTalonFX implements ArmIO {
         motionMagicConfigs.MotionMagicCruiseVelocity = ArmConstants.ARM_CRUISE_VELOCITY_RPS;
 
         armTalonFX.getConfigurator().apply(armTalonFXconfig);
+
 
         // Setting logger frequency
         BaseStatusSignal.setUpdateFrequencyForAll(
@@ -96,12 +105,12 @@ class ArmIOTalonFX implements ArmIO {
 
     // Makes arm go to setpoint
     public void setArmSetpoint(Rotation2d rotations) {
-        armPositionReq.withPosition(rotations.getRotations());
+        armTalonFX.setControl(armPositionReq.withPosition(rotations.getRotations()));
     }
 
     // Makes motor use this voltage
     public void setArmVoltage(double voltage) {
-        armVoltageReq.withOutput(voltage);
+        armTalonFX.setControl(armVoltageReq.withOutput(voltage));
     }
 
     // Changes brake mode
